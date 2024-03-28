@@ -38,25 +38,19 @@ namespace AlgorithmsDataStructures2
 
         public void DeleteNode(SimpleTreeNode<T> NodeToDelete)
         {
-            if (Root != null && NodeToDelete != null)
+            // ваш код удаления существующего узла NodeToDelete
+            if (Root == null || NodeToDelete == null)
             {
-                SimpleTreeNode<T> ParentNode = null;
-                List<SimpleTreeNode<T>> RootChildren = GetChildren(Root);
-
-                foreach (SimpleTreeNode<T> node in RootChildren)
-                {
-                    if (node == NodeToDelete)
-                    {
-                        ParentNode = node.Parent;
-                        ParentNode.Children.Remove(node);
-                    }
-                }
-
-                if (ParentNode != null && ParentNode.Children.Count == 0)
-                {
-                    ParentNode.Children = null;
-                }
+                return;
             }
+
+            if (Root == NodeToDelete)
+            {
+                Root = null;
+                return;
+            }
+
+            DeleteNodeRecursive(Root, NodeToDelete);
         }
 
         public List<SimpleTreeNode<T>> GetAllNodes()
@@ -101,14 +95,14 @@ namespace AlgorithmsDataStructures2
             // в качестве дочернего для узла NewParent
             if (Root != null && OriginalNode != null && NewParent != null)
             {
-                OriginalNode.Parent?.Children.Remove(OriginalNode); //Удаляем узел из старого родителя, если он существует
-                OriginalNode.Parent = NewParent; //Обновляем ссылку на нового родителя
+                OriginalNode.Parent?.Children.Remove(OriginalNode);
+                OriginalNode.Parent = NewParent;
 
                 if (NewParent.Children == null)
                 {
                     NewParent.Children = new List<SimpleTreeNode<T>>();
                 }
-                NewParent.Children.Add(OriginalNode); //Добавляем узел к новому родителю
+                NewParent.Children.Add(OriginalNode);
             }
         }
 
@@ -125,6 +119,7 @@ namespace AlgorithmsDataStructures2
 
         public int LeafCount()
         {
+            // количество листьев в дереве
             if (Root == null)
             {
                 return 0;
@@ -163,6 +158,24 @@ namespace AlgorithmsDataStructures2
             return Children;
         }
 
+        private void DeleteNodeRecursive(SimpleTreeNode<T> currentNode, SimpleTreeNode<T> NodeToDelete)
+        {
+            if (currentNode.Children != null)
+            {
+                foreach (SimpleTreeNode<T> childNode in currentNode.Children)
+                {
+                    if (childNode == NodeToDelete)
+                    {
+                        currentNode.Children.Remove(childNode);
+                        return;
+                    }
+                    else
+                    {
+                        DeleteNodeRecursive(childNode, NodeToDelete);
+                    }
+                }
+            }
+        }
     }
 
 }
