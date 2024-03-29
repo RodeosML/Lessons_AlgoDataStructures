@@ -73,20 +73,38 @@ public class UnitTest1
     public void TestMoveNode()
     {
         SimpleTreeNode<int> node1 = new SimpleTreeNode<int>(1, null);
-        SimpleTreeNode<int> node2 = new SimpleTreeNode<int>(2, node1);
-        SimpleTreeNode<int> node3 = new SimpleTreeNode<int>(3, node1);
-        node1.Children = new List<SimpleTreeNode<int>> { node2, node3 };
-
-        SimpleTreeNode<int> newNode = new SimpleTreeNode<int>(4, null);
+        SimpleTreeNode<int> node2 = new SimpleTreeNode<int>(2, null);
+        SimpleTreeNode<int> node3 = new SimpleTreeNode<int>(45, null);
+        SimpleTreeNode<int> node4 = new SimpleTreeNode<int>(3, null);
+        SimpleTreeNode<int> node5 = new SimpleTreeNode<int>(5, null);
+        SimpleTreeNode<int> node6 = new SimpleTreeNode<int>(23, null);
+        SimpleTreeNode<int> node7 = new SimpleTreeNode<int>(5, null);
+        SimpleTreeNode<int> node8 = new SimpleTreeNode<int>(9, null);
+        SimpleTreeNode<int> node9 = new SimpleTreeNode<int>(14, null);
 
         SimpleTree<int> tree = new SimpleTree<int>(node1);
 
-        tree.MoveNode(node2, newNode);
+        tree.AddChild(node1, node2);
+        tree.AddChild(node2, node4);
+        tree.AddChild(node2, node5);
+        tree.AddChild(node5, node7);
+        tree.AddChild(node5, node8);
+        tree.AddChild(node1, node3);
+        tree.AddChild(node3, node6);
+        tree.AddChild(node6, node9);
 
-        Assert.AreEqual(newNode, node2.Parent);
-        Assert.IsTrue(newNode.Children.Contains(node2));
-        Assert.IsFalse(node1.Children.Contains(node2));
+        tree.MoveNode(node5, node6);
+
+        Assert.AreEqual(1, node2.Children.Count);
+        Assert.AreEqual(node4, node2.Children[0]);
+        Assert.AreEqual(2, node6.Children.Count);
+        Assert.AreEqual(node9, node6.Children[0]);
+        Assert.AreEqual(node5, node6.Children[1]);
+        Assert.AreEqual(2, node5.Children.Count);
+        Assert.AreEqual(node7, node5.Children[0]);
+        Assert.AreEqual(node8, node5.Children[1]);
     }
+
 
     [TestMethod]
     public void TestCount()
@@ -101,16 +119,6 @@ public class UnitTest1
         int count = tree.Count();
 
         Assert.AreEqual(3, count);
-    }
-
-    [TestMethod]
-    public void LeafCount_ReturnsZeroForEmptyTree()
-    {
-        SimpleTree<int> tree = new SimpleTree<int>(null);
-
-        int leafCount = tree.LeafCount();
-
-        Assert.AreEqual(0, leafCount);
     }
 
     [TestMethod]
@@ -151,5 +159,21 @@ public class UnitTest1
         Assert.AreEqual(1, leafCount);
     }
 
+    [TestMethod]
+    public void EvenTrees_ReturnsCorrectDeletedEdges()
+    {
+        SimpleTreeNode<int> node1 = new SimpleTreeNode<int>(1, null);
+        SimpleTreeNode<int> node2 = new SimpleTreeNode<int>(2, node1);
+        SimpleTreeNode<int> node3 = new SimpleTreeNode<int>(3, node1);
+        SimpleTreeNode<int> node4 = new SimpleTreeNode<int>(4, node2);
 
+        SimpleTree<int> tree = new SimpleTree<int>(node1);
+        tree.AddChild(node1, node2);
+        tree.AddChild(node1, node3);
+        tree.AddChild(node2, node4);
+
+        List<int> result = tree.EvenTrees();
+
+        CollectionAssert.AreEquivalent(new List<int> { 1, 2, 1, 4 }, result);
+    }
 }

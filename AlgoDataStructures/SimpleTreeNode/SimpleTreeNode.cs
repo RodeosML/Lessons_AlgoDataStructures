@@ -5,6 +5,7 @@ namespace AlgorithmsDataStructures2
 {
     public class SimpleTreeNode<T>
     {
+        public int NodeLevel;
         public T NodeValue; // значение в узле
         public SimpleTreeNode<T> Parent; // родитель или null для корня
         public List<SimpleTreeNode<T>> Children; // список дочерних узлов или null
@@ -24,16 +25,39 @@ namespace AlgorithmsDataStructures2
         public SimpleTree(SimpleTreeNode<T> root)
         {
             Root = root;
+            Root.NodeLevel = 0;
+        }
+
+        private void AddLevels(SimpleTreeNode<T> Root)
+        {
+            if (Root.Children == null || Root.Children.Count == 0) return;
+            foreach (SimpleTreeNode<T> node in Root.Children)
+            {
+                node.NodeLevel = Root.NodeLevel + 1;
+                AddLevels(node);
+            }
+        }
+
+        public void AddNodesLevels()
+        {
+            if (Root != null)
+            {
+                Root.NodeLevel = 0;
+                AddLevels(Root);
+            }
         }
 
         public void AddChild(SimpleTreeNode<T> ParentNode, SimpleTreeNode<T> NewChild)
         {
             // ваш код добавления нового дочернего узла существующему ParentNode
             if (ParentNode.Children == null)
+            {
                 ParentNode.Children = new List<SimpleTreeNode<T>>();
+            }
 
             ParentNode.Children.Add(NewChild);
-            ParentNode.Parent = ParentNode;
+            NewChild.Parent = ParentNode;
+            NewChild.NodeLevel = NewChild.Parent.NodeLevel + 1;
         }
 
         public void DeleteNode(SimpleTreeNode<T> NodeToDelete)
@@ -53,17 +77,51 @@ namespace AlgorithmsDataStructures2
             DeleteNodeRecursive(Root, NodeToDelete);
         }
 
+
+        private void DeleteNodeRecursive(SimpleTreeNode<T> currentNode, SimpleTreeNode<T> NodeToDelete)
+        {
+            if (currentNode.Children != null)
+            {
+                foreach (SimpleTreeNode<T> childNode in currentNode.Children)
+                {
+                    if (childNode == NodeToDelete)
+                    {
+                        currentNode.Children.Remove(childNode);
+                        return;
+                    }
+                    else
+                    {
+                        DeleteNodeRecursive(childNode, NodeToDelete);
+                    }
+                }
+            }
+        }
+
         public List<SimpleTreeNode<T>> GetAllNodes()
         {
             // ваш код выдачи всех узлов дерева в определённом порядке
-            if (Root != null)
+            if (Root == null)
+                return new List<SimpleTreeNode<T>>();
+
+            return GetNodes(Root);
+        }
+
+        private List<SimpleTreeNode<T>> GetNodes(SimpleTreeNode<T> rootNode)
+        {
+            List<SimpleTreeNode<T>> nodes = new List<SimpleTreeNode<T>>();
+            nodes.Add(rootNode);
+
+            if (rootNode.Children == null || rootNode.Children.Count == 0)
             {
-                List<SimpleTreeNode<T>> AllNodes = new List<SimpleTreeNode<T>>();
-                AllNodes.Add(Root);
-                AllNodes.AddRange(GetChildren(Root));
-                return AllNodes;
+                return nodes;
             }
-            return null;
+
+            foreach (SimpleTreeNode<T> node in rootNode.Children)
+            {
+                nodes.AddRange(GetNodes(node));
+            }
+
+            return nodes;
         }
 
         public List<SimpleTreeNode<T>> FindNodesByValue(T val)
@@ -93,16 +151,11 @@ namespace AlgorithmsDataStructures2
         {
             // ваш код перемещения узла вместе с его поддеревом -- 
             // в качестве дочернего для узла NewParent
-            if (Root != null && OriginalNode != null && NewParent != null)
+            if (OriginalNode.Parent != null)
             {
-                OriginalNode.Parent?.Children.Remove(OriginalNode);
-                OriginalNode.Parent = NewParent;
-
-                if (NewParent.Children == null)
-                {
-                    NewParent.Children = new List<SimpleTreeNode<T>>();
-                }
+                OriginalNode.Parent.Children.Remove(OriginalNode);
                 NewParent.Children.Add(OriginalNode);
+                OriginalNode.Parent = NewParent;
             }
         }
 
@@ -117,31 +170,25 @@ namespace AlgorithmsDataStructures2
             return 0;
         }
 
+        private int GetLeafs(SimpleTreeNode<T> root)
+        {
+            if (root.Children == null || !root.Children.Any())
+                return 1;
+            int leafs = 0;
+
+            foreach (SimpleTreeNode<T> node in root.Children)
+            {
+                leafs += GetLeafs(node);
+            }
+            return leafs;
+        }
+
         public int LeafCount()
         {
             // количество листьев в дереве
             if (Root == null)
-            {
                 return 0;
-            }
-
-            return CountLeaves(Root);
-        }
-
-        private int CountLeaves(SimpleTreeNode<T> node)
-        {
-            if (node.Children == null || node.Children.Count == 0)
-            {
-                return 1;
-            }
-
-            int count = 0;
-            foreach (var child in node.Children)
-            {
-                count += CountLeaves(child);
-            }
-
-            return count;
+            return GetLeafs(Root);
         }
 
         public List<SimpleTreeNode<T>> GetChildren(SimpleTreeNode<T> Node)
@@ -158,24 +205,32 @@ namespace AlgorithmsDataStructures2
             return Children;
         }
 
-        private void DeleteNodeRecursive(SimpleTreeNode<T> currentNode, SimpleTreeNode<T> NodeToDelete)
+        public List<T> EvenTrees()
         {
-            if (currentNode.Children != null)
+            List<T> deletedEdges = new List<T>();
+            Queue<SimpleTreeNode<T>> queue = new Queue<SimpleTreeNode<T>>();
+            SimpleTreeNode<T> node = Root;
+            queue.Enqueue(node);
+            while (queue.Count > 0)
             {
-                foreach (SimpleTreeNode<T> childNode in currentNode.Children)
+                node = queue.Dequeue();
+                SimpleTree<T> tree = new SimpleTree<T>(node);
+                if ((tree.Count() & 1) == 0)
                 {
-                    if (childNode == NodeToDelete)
+                    foreach (var child in node.Children)
                     {
-                        currentNode.Children.Remove(childNode);
-                        return;
-                    }
-                    else
-                    {
-                        DeleteNodeRecursive(childNode, NodeToDelete);
+                        queue.Enqueue(child);
                     }
                 }
+                if ((tree.Count() & 1) == 0 && node.Parent != null)
+                {
+                    deletedEdges.Add(node.Parent.NodeValue);
+                    deletedEdges.Add(node.NodeValue);
+                }
             }
+            return deletedEdges;
         }
+
     }
 
 }
