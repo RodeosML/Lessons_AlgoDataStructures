@@ -163,17 +163,35 @@ public class UnitTest1
     public void EvenTrees_ReturnsCorrectDeletedEdges()
     {
         SimpleTreeNode<int> node1 = new SimpleTreeNode<int>(1, null);
-        SimpleTreeNode<int> node2 = new SimpleTreeNode<int>(2, node1);
-        SimpleTreeNode<int> node3 = new SimpleTreeNode<int>(3, node1);
-        SimpleTreeNode<int> node4 = new SimpleTreeNode<int>(4, node2);
+        SimpleTreeNode<int> node2 = new SimpleTreeNode<int>(2, null);
+        SimpleTreeNode<int> node3 = new SimpleTreeNode<int>(3, null);
+        SimpleTreeNode<int> node4 = new SimpleTreeNode<int>(4, null);
+        SimpleTreeNode<int> node5 = new SimpleTreeNode<int>(5, null);
+        SimpleTreeNode<int> node6 = new SimpleTreeNode<int>(6, null);
+        SimpleTreeNode<int> node7 = new SimpleTreeNode<int>(7, null);
+        SimpleTreeNode<int> node8 = new SimpleTreeNode<int>(8, null);
+        SimpleTreeNode<int> node9 = new SimpleTreeNode<int>(9, null);
+        SimpleTreeNode<int> node10 = new SimpleTreeNode<int>(10, null);
 
         SimpleTree<int> tree = new SimpleTree<int>(node1);
         tree.AddChild(node1, node2);
         tree.AddChild(node1, node3);
-        tree.AddChild(node2, node4);
+        tree.AddChild(node1, node6);
+        tree.AddChild(node2, node5);
+        tree.AddChild(node2, node7);
+        tree.AddChild(node3, node4);
+        tree.AddChild(node6, node8);
+        tree.AddChild(node8, node9);
+        tree.AddChild(node8, node10);
+
+        List<int> levels = new List<int>();
+        levels.Add(1);
+        levels.Add(3);
+        levels.Add(1);
+        levels.Add(6);
 
         List<int> result = tree.EvenTrees();
 
-        CollectionAssert.AreEquivalent(new List<int> { 1, 2, 1, 4 }, result);
+        CollectionAssert.AreEqual(levels, result);
     }
 }
