@@ -151,11 +151,25 @@ namespace AlgorithmsDataStructures2
         {
             // ваш код перемещения узла вместе с его поддеревом -- 
             // в качестве дочернего для узла NewParent
-            if (OriginalNode.Parent != null)
+            if (Root != null)
             {
-                OriginalNode.Parent.Children.Remove(OriginalNode);
-                NewParent.Children.Add(OriginalNode);
-                OriginalNode.Parent = NewParent;
+                SimpleTreeNode<T> OldParent;
+                List<SimpleTreeNode<T>> AllNodes = GetAllNodes();
+                foreach (SimpleTreeNode<T> node in AllNodes)
+                {
+                    if (node == OriginalNode)
+                    {
+                        OldParent = node.Parent;
+                        node.Parent = NewParent;
+                        AddChild(NewParent, node);
+                        OldParent.Children.Remove(node);
+                        if (OldParent.Children.Count == 0)
+                        {
+                            OldParent.Children = null;
+                        }
+                        return;
+                    }
+                }
             }
         }
 
