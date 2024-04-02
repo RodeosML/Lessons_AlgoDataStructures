@@ -9,8 +9,10 @@
 
   <ItemGroup>
     <None Remove="SimpleTreeNode\" />
+    <None Remove="BSTNode\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SimpleTreeNode\" />
+    <Folder Include="BSTNode\" />
   </ItemGroup>
 </Project>
