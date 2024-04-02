@@ -132,62 +132,8 @@ namespace AlgorithmsDataStructures2
             return findMin(FromNode);
         }
 
-        private void setParentChild(BSTFind<T> foundNode, int key)
-        {
-            if (key < foundNode.Node.Parent.NodeKey)
-            {
-                foundNode.Node.Parent.LeftChild = foundNode.Node.LeftChild;
-                foundNode.Node.LeftChild.Parent = foundNode.Node.Parent;
-            }
-            else
-            {
-                foundNode.Node.Parent.RightChild = foundNode.Node.LeftChild;
-                foundNode.Node.LeftChild.Parent = foundNode.Node.Parent;
-            }
-        }
-
-        private void nodeToNull(BSTFind<T> foundNode, int key)
-        {
-            if (foundNode.Node == Root)
-            {
-                Root = null;
-            }
-            else if (key < foundNode.Node.Parent.NodeKey)
-            {
-                foundNode.Node.Parent.LeftChild = null;
-            }
-            else
-            {
-                foundNode.Node.Parent.RightChild = null;
-            }
-        }
-
         public bool DeleteNodeByKey(int key)
         {
-            //Удаляем узел по ключу
-            BSTFind<T> foundNode = FindNodeByKey(key);
-            if (!foundNode.NodeHasKey)
-            {
-                return false;
-            }
-            //Есть правый потомок
-            if (foundNode.Node.RightChild != null)
-            {
-                BSTNode<T> minNode = FinMinMax(foundNode.Node.RightChild, false);
-                int temp = minNode.NodeKey;
-                DeleteNodeByKey(temp);
-                foundNode.Node.NodeKey = temp;
-            }
-            //Есть левый потомок
-            if (foundNode.Node.LeftChild != null && foundNode.Node.RightChild == null)
-            {
-                setParentChild(foundNode, key);
-            }
-            //Нет потомков
-            if (foundNode.Node.LeftChild == null && foundNode.Node.RightChild == null)
-            {
-                nodeToNull(foundNode, key);
-            }
             return true;
         }
 
