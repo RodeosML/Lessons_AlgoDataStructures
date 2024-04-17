@@ -1,4 +1,4 @@
-﻿using AlgorithmsDataStructures2.AlgorithmsDataStructures2;
+﻿using AlgorithmsDataStructures2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
