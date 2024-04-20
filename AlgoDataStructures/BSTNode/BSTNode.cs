@@ -242,12 +242,12 @@ namespace AlgorithmsDataStructures2
             return WideList;
         }
 
-        public List<BSTNode<T>> DeepAllNodes(int Order)
+        public List<BSTNode<T>> DeepAllNodes(int order)
         {
-            return DeepTraversing(Root, Order);
+            return DeepTraversing(Root, order);
         }
 
-        public List<BSTNode<T>> DeepTraversing(BSTNode<T> fromNode, int Order)
+        private List<BSTNode<T>> DeepTraversing(BSTNode<T> fromNode, int order)
         {
             List<BSTNode<T>> DeepList = new List<BSTNode<T>>();
             BSTNode<T> Node = fromNode;
@@ -255,21 +255,21 @@ namespace AlgorithmsDataStructures2
 
             if (Node != null)
             {
-                switch (Order)
+                switch (order)
                 {
                     case 0: //in-order
                         {
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
+                            DeepList.AddRange(DeepTraversing(Node.LeftChild, order));
                             DeepList.Add(Node);
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
+                            DeepList.AddRange(DeepTraversing(Node.RightChild, order));
 
                             break;
                         }
 
                     case 1: //post-order
                         {
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
+                            DeepList.AddRange(DeepTraversing(Node.LeftChild, order));
+                            DeepList.AddRange(DeepTraversing(Node.RightChild, order));
                             DeepList.Add(Node);
 
                             break;
@@ -278,8 +278,8 @@ namespace AlgorithmsDataStructures2
                     case 2: //pre-order
                         {
                             DeepList.Add(Node);
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
+                            DeepList.AddRange(DeepTraversing(Node.LeftChild, order));
+                            DeepList.AddRange(DeepTraversing(Node.RightChild, order));
                             break;
                         }
 
