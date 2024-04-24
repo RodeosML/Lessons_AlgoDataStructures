@@ -212,64 +212,57 @@ namespace AlgorithmsDataStructures2
             return GetSize(Root); // количество узлов в дереве
         }
 
-
-        private void WideAllNodesRecursive(Queue<BSTNode<T>> nodesQueue, List<BSTNode<T>> wideList)
-        {
-            if (nodesQueue.Count == 0)
-                return;
-
-            BSTNode<T> node = nodesQueue.Dequeue();
-            wideList.Add(node);
-
-            if (node.LeftChild != null)
-                nodesQueue.Enqueue(node.LeftChild);
-            if (node.RightChild != null)
-                nodesQueue.Enqueue(node.RightChild);
-
-            WideAllNodesRecursive(nodesQueue, wideList);
-        }
-
         public List<BSTNode<T>> WideAllNodes()
         {
             List<BSTNode<T>> WideList = new List<BSTNode<T>>();
             Queue<BSTNode<T>> NodesQueue = new Queue<BSTNode<T>>();
+            BSTNode<T> Node = Root;
+            NodesQueue.Enqueue(Root);
 
             if (Root != null)
-                NodesQueue.Enqueue(Root);
+            {
+                while (NodesQueue.Count > 0)
+                {
+                    Node = NodesQueue.Dequeue();
+                    WideList.Add(Node);
 
-            WideAllNodesRecursive(NodesQueue, WideList);
-
-            return WideList;
+                    if (Node.LeftChild != null)
+                        NodesQueue.Enqueue(Node.LeftChild);
+                    if (Node.RightChild != null)
+                        NodesQueue.Enqueue(Node.RightChild);
+                }
+                return WideList;
+            }
+            return null;
         }
 
-        public List<BSTNode<T>> DeepAllNodes(int order)
+        public List<BSTNode<T>> DeepAllNodes(int Order)
         {
-            return DeepTraversing(Root, order);
+            return DeepTraversing(Root, Order);
         }
 
-        private List<BSTNode<T>> DeepTraversing(BSTNode<T> fromNode, int order)
+        public List<BSTNode<T>> DeepTraversing(BSTNode<T> fromNode, int Order)
         {
             List<BSTNode<T>> DeepList = new List<BSTNode<T>>();
             BSTNode<T> Node = fromNode;
 
-
             if (Node != null)
             {
-                switch (order)
+                switch (Order)
                 {
                     case 0: //in-order
                         {
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, order));
+                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
                             DeepList.Add(Node);
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, order));
+                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
 
                             break;
                         }
 
                     case 1: //post-order
                         {
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, order));
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, order));
+                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
+                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
                             DeepList.Add(Node);
 
                             break;
@@ -278,8 +271,8 @@ namespace AlgorithmsDataStructures2
                     case 2: //pre-order
                         {
                             DeepList.Add(Node);
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, order));
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, order));
+                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
+                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
                             break;
                         }
 
