@@ -241,7 +241,7 @@ namespace AlgorithmsDataStructures2
             return DeepTraversing(Root, Order);
         }
 
-        public List<BSTNode<T>> DeepTraversing(BSTNode<T> fromNode, int Order)
+        private List<BSTNode<T>> DeepTraversing(BSTNode<T> fromNode, int Order)
         {
             List<BSTNode<T>> DeepList = new List<BSTNode<T>>();
             BSTNode<T> Node = fromNode;
