@@ -216,24 +216,23 @@ namespace AlgorithmsDataStructures2
         {
             List<BSTNode<T>> WideList = new List<BSTNode<T>>();
             Queue<BSTNode<T>> NodesQueue = new Queue<BSTNode<T>>();
-            BSTNode<T> Node = Root;
-            NodesQueue.Enqueue(Root);
 
             if (Root != null)
             {
+                NodesQueue.Enqueue(Root);
+
                 while (NodesQueue.Count > 0)
                 {
-                    Node = NodesQueue.Dequeue();
-                    WideList.Add(Node);
+                    BSTNode<T> node = NodesQueue.Dequeue();
+                    WideList.Add(node);
 
-                    if (Node.LeftChild != null)
-                        NodesQueue.Enqueue(Node.LeftChild);
-                    if (Node.RightChild != null)
-                        NodesQueue.Enqueue(Node.RightChild);
+                    if (node.LeftChild != null)
+                        NodesQueue.Enqueue(node.LeftChild);
+                    if (node.RightChild != null)
+                        NodesQueue.Enqueue(node.RightChild);
                 }
-                return WideList;
             }
-            return null;
+            return WideList;
         }
 
         public List<BSTNode<T>> DeepAllNodes(int Order)
