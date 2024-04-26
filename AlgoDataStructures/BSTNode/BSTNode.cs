@@ -5,11 +5,11 @@ namespace AlgorithmsDataStructures2
 {
     public class BSTNode<T>
     {
-        public int NodeKey; // ключ узла
-        public T NodeValue; // значение в узле
-        public BSTNode<T> Parent; // родитель или null для корня
-        public BSTNode<T> LeftChild; // левый потомок
-        public BSTNode<T> RightChild; // правый потомок	
+        public int NodeKey;
+        public T NodeValue;
+        public BSTNode<T> Parent;
+        public BSTNode<T> LeftChild;
+        public BSTNode<T> RightChild;
 
         public BSTNode(int key, T val, BSTNode<T> parent)
         {
@@ -21,16 +21,12 @@ namespace AlgorithmsDataStructures2
         }
     }
 
-    // промежуточный результат поиска
     public class BSTFind<T>
     {
-        // null если в дереве вообще нету узлов
         public BSTNode<T> Node;
 
-        // true если узел найден
         public bool NodeHasKey;
 
-        // true, если родительскому узлу надо добавить новый левым
         public bool ToLeft;
 
         public BSTFind() { Node = null; }
@@ -38,7 +34,7 @@ namespace AlgorithmsDataStructures2
 
     public class BST<T>
     {
-        BSTNode<T> Root; // корень дерева, или null
+        BSTNode<T> Root;
 
         public BST(BSTNode<T> node)
         {
@@ -47,7 +43,6 @@ namespace AlgorithmsDataStructures2
 
         public BSTFind<T> FindNodeByKey(int key)
         {
-            // ищем в дереве узел и сопутствующую информацию по ключу
             if (Root == null)
                 return new BSTFind<T>();
 
@@ -92,7 +87,6 @@ namespace AlgorithmsDataStructures2
 
         public bool AddKeyValue(int key, T val)
         {
-            // добавляем ключ-значение в дерево
             BSTFind<T> foundNode = FindNodeByKey(key);
             if (foundNode.NodeHasKey)
             {
@@ -117,7 +111,6 @@ namespace AlgorithmsDataStructures2
 
         public BSTNode<T> FinMinMax(BSTNode<T> FromNode, bool FindMax)
         {
-            // ищем максимальный/минимальный ключ в поддереве
             if (FindMax)
                 return FindMaxKey(FromNode);
 
@@ -177,7 +170,7 @@ namespace AlgorithmsDataStructures2
             {
                 return false;
             }
-            //Проверяем, что есть правый потомок
+
             if (foundNode.Node.RightChild != null)
             {
                 BSTNode<T> minNode = FinMinMax(foundNode.Node.RightChild, false);
@@ -185,12 +178,12 @@ namespace AlgorithmsDataStructures2
                 DeleteNodeByKey(temp);
                 foundNode.Node.NodeKey = temp;
             }
-            //Проверяем, что есть левый потомок
+
             if (foundNode.Node.LeftChild != null && foundNode.Node.RightChild == null)
             {
                 SetParentChild(foundNode, key);
             }
-            //Проверяем, что нет потомков
+
             if (foundNode.Node.LeftChild == null && foundNode.Node.RightChild == null)
             {
                 NodeToNull(foundNode, key);
@@ -209,7 +202,7 @@ namespace AlgorithmsDataStructures2
 
         public int Count()
         {
-            return GetSize(Root); // количество узлов в дереве
+            return GetSize(Root);
         }
 
         public List<BSTNode<T>> WideAllNodes()
@@ -249,7 +242,7 @@ namespace AlgorithmsDataStructures2
             {
                 switch (Order)
                 {
-                    case 0: //in-order
+                    case 0:
                         {
                             DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
                             DeepList.Add(Node);
@@ -258,7 +251,7 @@ namespace AlgorithmsDataStructures2
                             break;
                         }
 
-                    case 1: //post-order
+                    case 1:
                         {
                             DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
                             DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
@@ -267,7 +260,7 @@ namespace AlgorithmsDataStructures2
                             break;
                         }
 
-                    case 2: //pre-order
+                    case 2:
                         {
                             DeepList.Add(Node);
                             DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
