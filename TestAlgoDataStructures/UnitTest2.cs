@@ -1,11 +1,11 @@
-﻿using AlgorithmsDataStructures3;
+﻿using AlgorithmsDataStructures1;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace AlgorithmsDataStructures3.Tests
+namespace AlgorithmsDataStructures1.Tests
 {
     [TestClass]
-    public class BSTTests2
+    public class BSTTests
     {
         BST<int> Tree;
         BST<int> ZeroTree;

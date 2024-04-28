@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using AlgorithmsDataStructures1;
 
 namespace AlgorithmsDataStructures2
 {
-    public class BSTNode
+    public class BSTNode<T>
     {
         public int NodeKey;
-        public object NodeValue;
-        public BSTNode Parent;
-        public BSTNode LeftChild;
-        public BSTNode RightChild;
+        public T NodeValue;
+        public BSTNode<T> Parent;
+        public BSTNode<T> LeftChild;
+        public BSTNode<T> RightChild;
 
-        public BSTNode(int key, object val, BSTNode parent)
+        public BSTNode(int key, T val, BSTNode<T> parent)
         {
             NodeKey = key;
             NodeValue = val;
@@ -21,78 +22,96 @@ namespace AlgorithmsDataStructures2
         }
     }
 
-    public class BST
+    public class BSTFind<T>
     {
-        public BSTNode Root { get; set; }
+        public BSTNode<T> Node;
+
+        public bool NodeHasKey;
+
+        public bool ToLeft;
+
+        public BSTFind() { Node = null; }
+    }
+
+    public class BST<T>
+    {
+        BSTNode<T> Root;
+
+        public BST(BSTNode<T> node)
+        {
+            Root = node;
+        }
 
         public List<BSTNode> WideAllNodes()
         {
-            List<BSTNode> WideList = new List<BSTNode>();
-            Queue<BSTNode> NodesQueue = new Queue<BSTNode>();
+            List<BSTNode> listOfNodes = new List<BSTNode>();
 
-            if (Root != null)
+            Queue<BSTNode<T>> NodesQueue = new Queue<BSTNode<T>>();
+            NodesQueue.Enqueue(Root);
+
+            while (NodesQueue.Count > 0)
             {
-                NodesQueue.Enqueue(Root);
+                var currentNode = NodesQueue.Dequeue();
+                var bstNode = new BSTNode(currentNode.NodeKey);
+                listOfNodes.Add(bstNode);
 
-                while (NodesQueue.Count > 0)
+                if (currentNode.LeftChild != null)
                 {
-                    BSTNode node = NodesQueue.Dequeue();
-                    WideList.Add(node);
-
-                    if (node.LeftChild != null)
-                        NodesQueue.Enqueue(node.LeftChild);
-                    if (node.RightChild != null)
-                        NodesQueue.Enqueue(node.RightChild);
+                    NodesQueue.Enqueue(currentNode.LeftChild);
+                }
+                if (currentNode.RightChild != null)
+                {
+                    NodesQueue.Enqueue(currentNode.RightChild);
                 }
             }
-            return WideList;
+
+            return listOfNodes;
         }
 
-        public List<BSTNode> DeepAllNodes(int Order)
+        public List<BSTNode> DeepAllNodes(int order)
         {
-            return DeepTraversing(Root, Order);
+            return DeepTraversing(Root, order);
         }
 
-        private List<BSTNode> DeepTraversing(BSTNode fromNode, int Order)
+        private List<BSTNode> DeepTraversing(BSTNode<T> node, int order)
         {
-            List<BSTNode> DeepList = new List<BSTNode>();
-            BSTNode Node = fromNode;
+            List<BSTNode> listOfNodes = new List<BSTNode>();
 
-            if (Node != null)
+            if (node == null) return listOfNodes;
+
+            switch (order)
             {
-                switch (Order)
-                {
-                    case 0:
-                        {
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
-                            DeepList.Add(Node);
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
-
-                            break;
-                        }
-
-                    case 1:
-                        {
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
-                            DeepList.Add(Node);
-
-                            break;
-                        }
-
-                    case 2:
-                        {
-                            DeepList.Add(Node);
-                            DeepList.AddRange(DeepTraversing(Node.LeftChild, Order));
-                            DeepList.AddRange(DeepTraversing(Node.RightChild, Order));
-                            break;
-                        }
-
-                    default:
-                        return null;
-                }
+                case 0:
+                    listOfNodes.AddRange(DeepTraversing(node.LeftChild, order));
+                    listOfNodes.Add(new BSTNode(node.NodeKey));
+                    listOfNodes.AddRange(DeepTraversing(node.RightChild, order));
+                    break;
+                case 1:
+                    listOfNodes.AddRange(DeepTraversing(node.LeftChild, order));
+                    listOfNodes.AddRange(DeepTraversing(node.RightChild, order));
+                    listOfNodes.Add(new BSTNode(node.NodeKey));
+                    break;
+                case 2:
+                    listOfNodes.Add(new BSTNode(node.NodeKey));
+                    listOfNodes.AddRange(DeepTraversing(node.LeftChild, order));
+                    listOfNodes.AddRange(DeepTraversing(node.RightChild, order));
+                    break;
+                default:
+                    break;
             }
-            return DeepList;
+
+            return listOfNodes;
         }
     }
+
+    public class BSTNode
+    {
+        public int NodeKey;
+
+        public BSTNode(int key)
+        {
+            NodeKey = key;
+        }
+    }
+
 }
