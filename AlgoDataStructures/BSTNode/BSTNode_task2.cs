@@ -29,7 +29,7 @@ namespace AlgorithmsDataStructures2
 
             if (node.GetType() != typeof(BSTNode<int>))
             {
-                throw new Exception("Должно быть int");
+                throw new Exception("Внесите int значение");
             }
 
             BSTNode newNode = new BSTNode(node.NodeKey, Convert.ToInt32(node.NodeValue), null);
