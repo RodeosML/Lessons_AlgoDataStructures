@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AlgorithmsDataStructures1;
 
 namespace AlgorithmsDataStructures2
 {
@@ -19,6 +18,32 @@ namespace AlgorithmsDataStructures2
             Parent = parent;
             LeftChild = null;
             RightChild = null;
+        }
+
+        public static explicit operator BSTNode(BSTNode<T> node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            if (node.GetType() != typeof(BSTNode<int>))
+            {
+                throw new Exception("Должно быть int");
+            }
+
+            BSTNode newNode = new BSTNode(node.NodeKey, Convert.ToInt32(node.NodeValue), null);
+
+            return newNode;
+        }
+    }
+
+
+
+    public class BSTNode : BSTNode<int>
+    {
+        public BSTNode(int key, int val, BSTNode<int> parent) : base(key, val, parent)
+        {
         }
     }
 
@@ -42,75 +67,158 @@ namespace AlgorithmsDataStructures2
             Root = node;
         }
 
+        public BSTFind<T> FindNodeByKey(int key)
+        {
+            if (Root == null)
+                return new BSTFind<T>();
+
+            return FindNode(Root, key);
+        }
+
+        private BSTFind<T> FindNode(BSTNode<T> node, int key)
+        {
+            if (key == node.NodeKey)
+            {
+                BSTFind<T> foundNode = new BSTFind<T>();
+                foundNode.Node = node;
+                foundNode.NodeHasKey = true;
+                return foundNode;
+            }
+
+            if (key < node.NodeKey && node.LeftChild == null)
+            {
+                BSTFind<T> foundNode = new BSTFind<T>();
+                foundNode.Node = node;
+                foundNode.NodeHasKey = false;
+                foundNode.ToLeft = true;
+                return foundNode;
+            }
+
+            if (key > node.NodeKey && node.RightChild == null)
+            {
+                BSTFind<T> foundNode = new BSTFind<T>();
+                foundNode.Node = node;
+                foundNode.NodeHasKey = false;
+                foundNode.ToLeft = false;
+                return foundNode;
+            }
+
+            if (key < node.NodeKey)
+            {
+                return FindNode(node.LeftChild, key);
+            }
+
+            return FindNode(node.RightChild, key);
+        }
+
+        public bool AddKeyValue(int key, T val)
+        {
+            BSTFind<T> foundNode = FindNodeByKey(key);
+            if (foundNode.NodeHasKey)
+            {
+                return false;
+            }
+
+            BSTNode<T> newNode = new BSTNode<T>(key, val, foundNode.Node);
+            if (foundNode.Node == null)
+            {
+                Root = newNode;
+            }
+            else if (foundNode.ToLeft)
+            {
+                foundNode.Node.LeftChild = newNode;
+            }
+            else
+            {
+                foundNode.Node.RightChild = newNode;
+            }
+            return true;
+        }
+
         public List<BSTNode> WideAllNodes()
         {
-            List<BSTNode> listOfNodes = new List<BSTNode>();
+            List<BSTNode> result = new List<BSTNode>();
 
-            Queue<BSTNode<T>> NodesQueue = new Queue<BSTNode<T>>();
-            NodesQueue.Enqueue(Root);
-
-            while (NodesQueue.Count > 0)
+            if (Root == null)
             {
-                var currentNode = NodesQueue.Dequeue();
-                var bstNode = new BSTNode(currentNode.NodeKey);
-                listOfNodes.Add(bstNode);
+                return result;
+            }
 
-                if (currentNode.LeftChild != null)
+            Queue<BSTNode<T>> nodes = new Queue<BSTNode<T>>();
+            nodes.Enqueue(Root);
+
+            while (nodes.Count != 0)
+            {
+                BSTNode<T> currentElement = nodes.Dequeue();
+                result.Add((BSTNode)currentElement);
+
+                if (currentElement.LeftChild != null)
                 {
-                    NodesQueue.Enqueue(currentNode.LeftChild);
+                    nodes.Enqueue(currentElement.LeftChild);
                 }
-                if (currentNode.RightChild != null)
+
+                if (currentElement.RightChild != null)
                 {
-                    NodesQueue.Enqueue(currentNode.RightChild);
+                    nodes.Enqueue(currentElement.RightChild);
                 }
             }
 
-            return listOfNodes;
+            return result;
         }
 
-        public List<BSTNode> DeepAllNodes(int order)
+        public List<BSTNode> DeepAllNodes(int option)
         {
-            return DeepTraversing(Root, order);
-        }
+            List<BSTNode> result = new List<BSTNode>();
 
-        private List<BSTNode> DeepTraversing(BSTNode<T> node, int order)
-        {
-            List<BSTNode> listOfNodes = new List<BSTNode>();
+            if (Root == null)
+            {
+                return result;
+            }
 
-            if (node == null) return listOfNodes;
-
-            switch (order)
+            switch (option)
             {
                 case 0:
-                    listOfNodes.AddRange(DeepTraversing(node.LeftChild, order));
-                    listOfNodes.Add(new BSTNode(node.NodeKey));
-                    listOfNodes.AddRange(DeepTraversing(node.RightChild, order));
+                    PreOrder(result, Root);
                     break;
                 case 1:
-                    listOfNodes.AddRange(DeepTraversing(node.LeftChild, order));
-                    listOfNodes.AddRange(DeepTraversing(node.RightChild, order));
-                    listOfNodes.Add(new BSTNode(node.NodeKey));
+                    InOrder(result, Root);
                     break;
                 case 2:
-                    listOfNodes.Add(new BSTNode(node.NodeKey));
-                    listOfNodes.AddRange(DeepTraversing(node.LeftChild, order));
-                    listOfNodes.AddRange(DeepTraversing(node.RightChild, order));
-                    break;
-                default:
+                    PostOrder(result, Root);
                     break;
             }
 
-            return listOfNodes;
+            return result;
         }
-    }
 
-    public class BSTNode
-    {
-        public int NodeKey;
-
-        public BSTNode(int key)
+        private void PreOrder(List<BSTNode> result, BSTNode<T> node)
         {
-            NodeKey = key;
+            if (node != null)
+            {
+                result.Add((BSTNode)node);
+                PreOrder(result, node.LeftChild);
+                PreOrder(result, node.RightChild);
+            }
+        }
+
+        private void InOrder(List<BSTNode> result, BSTNode<T> node)
+        {
+            if (node != null)
+            {
+                result.Add((BSTNode)node);
+                InOrder(result, node.LeftChild);
+                InOrder(result, node.RightChild);
+            }
+        }
+
+        private void PostOrder(List<BSTNode> result, BSTNode<T> node)
+        {
+            if (node != null)
+            {
+                result.Add((BSTNode)node);
+                PostOrder(result, node.LeftChild);
+                PostOrder(result, node.RightChild);
+            }
         }
     }
 
