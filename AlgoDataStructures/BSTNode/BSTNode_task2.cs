@@ -178,13 +178,13 @@ namespace AlgorithmsDataStructures2
             switch (option)
             {
                 case 0:
-                    PreOrder(result, Root);
-                    break;
-                case 1:
                     InOrder(result, Root);
                     break;
-                case 2:
+                case 1:
                     PostOrder(result, Root);
+                    break;
+                case 2:
+                    PreOrder(result, Root);
                     break;
             }
 
