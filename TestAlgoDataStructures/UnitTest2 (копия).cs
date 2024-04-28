@@ -73,5 +73,68 @@ namespace AlgorithmsDataStructures2.Tests
 
             Assert.AreEqual(10, emptyTree.WideAllNodes().Count);
         }
+
+        [TestMethod]
+        public void InOrderIsCorrect()
+        {
+            var bst = new BST<int>(null);
+
+            bst.AddKeyValue(10, 10);
+            bst.AddKeyValue(5, 5);
+            bst.AddKeyValue(15, 15);
+            bst.AddKeyValue(3, 3);
+            bst.AddKeyValue(7, 7);
+
+            List<BSTNode> result = bst.DeepAllNodes(1);
+
+            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(3, result[0].NodeKey);
+            Assert.AreEqual(5, result[1].NodeKey);
+            Assert.AreEqual(7, result[2].NodeKey);
+            Assert.AreEqual(10, result[3].NodeKey);
+            Assert.AreEqual(15, result[4].NodeKey);
+        }
+
+        [TestMethod]
+        public void PreOrderIsCorrect()
+        {
+            var bst = new BST<int>(null);
+
+            bst.AddKeyValue(10, 10);
+            bst.AddKeyValue(5, 5);
+            bst.AddKeyValue(15, 15);
+            bst.AddKeyValue(3, 3);
+            bst.AddKeyValue(7, 7);
+
+            List<BSTNode> result = bst.DeepAllNodes(0);
+
+            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(10, result[0].NodeKey);
+            Assert.AreEqual(5, result[1].NodeKey);
+            Assert.AreEqual(3, result[2].NodeKey);
+            Assert.AreEqual(7, result[3].NodeKey);
+            Assert.AreEqual(15, result[4].NodeKey);
+        }
+
+        [TestMethod]
+        public void PostOrderIsCorrect()
+        {
+            var bst = new BST<int>(null);
+
+            bst.AddKeyValue(10, 10);
+            bst.AddKeyValue(5, 5);
+            bst.AddKeyValue(15, 15);
+            bst.AddKeyValue(3, 3);
+            bst.AddKeyValue(7, 7);
+
+            List<BSTNode> result = bst.DeepAllNodes(2);
+
+            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(3, result[0].NodeKey);
+            Assert.AreEqual(7, result[1].NodeKey);
+            Assert.AreEqual(5, result[2].NodeKey);
+            Assert.AreEqual(15, result[3].NodeKey);
+            Assert.AreEqual(10, result[4].NodeKey);
+        }
     }
 }
