@@ -205,8 +205,8 @@ namespace AlgorithmsDataStructures2
         {
             if (node != null)
             {
-                result.Add((BSTNode)node);
                 InOrder(result, node.LeftChild);
+                result.Add((BSTNode)node);
                 InOrder(result, node.RightChild);
             }
         }
@@ -215,11 +215,10 @@ namespace AlgorithmsDataStructures2
         {
             if (node != null)
             {
-                result.Add((BSTNode)node);
                 PostOrder(result, node.LeftChild);
                 PostOrder(result, node.RightChild);
+                result.Add((BSTNode)node);
             }
         }
     }
-
 }
