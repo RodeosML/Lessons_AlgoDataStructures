@@ -1,5 +1,5 @@
 ﻿using System;
-using AlgorithmsDataStructures2;
+using AlgorithmsDataStructures3;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestAlgoDataStructures;

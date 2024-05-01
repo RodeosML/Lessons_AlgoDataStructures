@@ -1,7 +1,7 @@
 ﻿using AlgorithmsDataStructures2;
 using System;
 
-namespace AlgorithmsDataStructures2.Tests
+namespace AlgorithmsDataStructures3.Tests
 {
     [TestClass]
     public class BSTTests2
