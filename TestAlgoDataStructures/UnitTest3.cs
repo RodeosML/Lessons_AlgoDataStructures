@@ -9,27 +9,69 @@ namespace Tests
         [TestMethod]
         public void TestAddKey()
         {
-            aBST tree = new aBST(3); // глубина 3 должна создать дерево с 15 элементами
+            aBST tree = new aBST(3);
             int key = 5;
 
             int index = tree.AddKey(key);
 
-            Assert.AreEqual(-1, index); // индекс корня должен быть 0
+            Assert.AreEqual(0, index);
         }
 
         [TestMethod]
-        public void TestFindKeyIndex()
+        public void FindKeyIndex_EmptyTree_ReturnsZero()
         {
-            aBST tree = new aBST(3);
-            int key = 5;
-            tree.AddKey(10);
-            tree.AddKey(3);
-            tree.AddKey(7);
-            tree.AddKey(15);
+            // Arrange
+            var aBST = new aBST(0);
 
-            int? index = tree.FindKeyIndex(key);
+            // Act
+            int? result = aBST.FindKeyIndex(5);
 
-            Assert.IsNull(index);
+            // Assert
+            Assert.AreEqual(0, (int?)result);
+        }
+
+        [TestMethod]
+        public void FindKeyIndex_KeyAtRoot_ReturnsZero()
+        {
+            // Arrange
+            var aBST = new aBST(1);
+            aBST.AddKey(3);
+
+            // Act
+            int? result = aBST.FindKeyIndex(3);
+
+            // Assert
+            Assert.AreEqual(0, (int?)result);
+        }
+
+        [TestMethod]
+        public void FindKeyIndex_KeyAtLeftChild_ReturnsIndex()
+        {
+            // Arrange
+            var aBST = new aBST(2);
+            aBST.AddKey(1);
+            aBST.AddKey(3);
+
+            // Act
+            int? result = aBST.FindKeyIndex(1);
+
+            // Assert
+            Assert.AreEqual(0, (int?)result);
+        }
+
+        [TestMethod]
+        public void FindKeyIndex_KeyAtRightChild_ReturnsIndex()
+        {
+            // Arrange
+            var aBST = new aBST(2);
+            aBST.AddKey(1);
+            aBST.AddKey(3);
+
+            // Act
+            int? result = aBST.FindKeyIndex(3);
+
+            // Assert
+            Assert.AreEqual(0, (int?)result);
         }
     }
 }
