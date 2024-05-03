@@ -46,14 +46,26 @@ namespace AlgorithmsDataStructures2
 
         public int AddKey(int key)
         {
-            int? index = FindKeyIndex(key);
-            if (index != null && index < 0)
+            int? res = FindKeyIndex(key);
+            if (res != null && capacity <= size)
             {
-                Tree[-(int)index] = key;
-                capacity++;
-                return -(int)index;
+                if (capacity == 0)
+                {
+                    Tree[0] = key;
+                    capacity++;
+                }
+
+                else if (res < 0 && res != null )
+                {
+                    Tree[(int)res * (-1)] = key;
+                    capacity++;
+                    return (int)res * (-1);
+                }
+
+                return (int)res;
             }
-            return index ?? -1;
+            else
+                return -1;
         }
 
     }

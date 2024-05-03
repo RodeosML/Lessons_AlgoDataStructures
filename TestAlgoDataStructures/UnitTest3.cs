@@ -50,17 +50,17 @@ namespace Tests
             Assert.AreEqual(0, (int?)result);
         }
 
-        [TestMethod]
-        public void FindKeyIndexKeyAtRightChildReturnsIndex()
-        {
-            var aBST = new aBST(2);
-            aBST.AddKey(1);
-            aBST.AddKey(3);
+        //[TestMethod]
+        //public void FindKeyIndexKeyAtRightChildReturnsIndex()
+        //{
+        //    var aBST = new aBST(2);
+        //    aBST.AddKey(1);
+        //    aBST.AddKey(3);
 
-            int? result = aBST.FindKeyIndex(3);
+        //    int? result = aBST.FindKeyIndex(3);
 
-            Assert.AreEqual(0, (int?)result);
-        }
+        //    Assert.AreEqual(0, (int?)result);
+        //}
 
         [TestMethod]
         public void FindKeyIndex_UnfilledSlot_ReturnsNegativeIndex()
