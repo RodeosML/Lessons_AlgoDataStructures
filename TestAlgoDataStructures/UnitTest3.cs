@@ -18,60 +18,59 @@ namespace Tests
         }
 
         [TestMethod]
-        public void FindKeyIndex_EmptyTree_ReturnsZero()
+        public void FindKeyIndexEmptyTreeReturnsZero()
         {
-            // Arrange
             var aBST = new aBST(0);
 
-            // Act
             int? result = aBST.FindKeyIndex(5);
 
-            // Assert
             Assert.AreEqual(0, (int?)result);
         }
 
         [TestMethod]
-        public void FindKeyIndex_KeyAtRoot_ReturnsZero()
+        public void FindKeyIndexKeyAtRootReturnsZero()
         {
-            // Arrange
             var aBST = new aBST(1);
             aBST.AddKey(3);
 
-            // Act
             int? result = aBST.FindKeyIndex(3);
 
-            // Assert
             Assert.AreEqual(0, (int?)result);
         }
 
         [TestMethod]
-        public void FindKeyIndex_KeyAtLeftChild_ReturnsIndex()
+        public void FindKeyIndexKeyAtLeftChildReturnsIndex()
         {
-            // Arrange
             var aBST = new aBST(2);
             aBST.AddKey(1);
             aBST.AddKey(3);
 
-            // Act
             int? result = aBST.FindKeyIndex(1);
 
-            // Assert
             Assert.AreEqual(0, (int?)result);
         }
 
         [TestMethod]
-        public void FindKeyIndex_KeyAtRightChild_ReturnsIndex()
+        public void FindKeyIndexKeyAtRightChildReturnsIndex()
         {
-            // Arrange
             var aBST = new aBST(2);
             aBST.AddKey(1);
             aBST.AddKey(3);
 
-            // Act
             int? result = aBST.FindKeyIndex(3);
 
-            // Assert
             Assert.AreEqual(0, (int?)result);
+        }
+
+        [TestMethod]
+        public void FindKeyIndex_UnfilledSlot_ReturnsNegativeIndex()
+        {
+            aBST tree = new aBST(3);
+            tree.Tree[0] = null;
+
+            int? result = tree.FindKeyIndex(10);
+
+            Assert.AreEqual(-0, result);
         }
     }
 }
