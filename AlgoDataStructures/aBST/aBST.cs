@@ -19,28 +19,21 @@ namespace AlgorithmsDataStructures2
 
         public int? FindKeyIndex(int key)
         {
-            if (size == 0)
-                return null;
+            if (Tree[0] == key || capacity == 0)
+                return 0;
 
-            int i = 0;
-            while (i < size && Tree[i] != null)
+            int? node = null;
+            for (int i = 0; i < size; i++)
             {
-                if ((int)Tree[i] == key)
+                node = Tree[i];
+                if (node == key)
                     return i;
+                else if (node == null)
+                    return -i;
 
-                if (key < (int)Tree[i])
-                {
-                    i = 2 * i + 1;
-                }
-                else
-                {
-                    i = 2 * i + 2;
-                }
+                bool goLeft = node > key;
+                i = goLeft ? 2 * i : 2 * i + 1;
             }
-
-            if (Tree[i] == null)
-                return -i;
-
             return null;
         }
 
