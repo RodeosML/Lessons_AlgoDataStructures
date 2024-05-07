@@ -5,15 +5,15 @@ namespace AlgorithmsDataStructures2
 {
     public static class BalancedBST
     {
-        public static int[] BBST;
+        public static int[] BalanceBST;
         public static int[] GenerateBBSTArray(int[] a)
         {
             Array.Sort(a);
 
-            BBST = new int[a.Length];
+            BalanceBST = new int[a.Length];
             Balance(a, 0);
 
-            return BBST;
+            return BalanceBST;
         }
 
         private static void Balance(int[] array, int index)
@@ -23,8 +23,8 @@ namespace AlgorithmsDataStructures2
 
             int centerIndex = array.Length / 2;
 
-            if (index < BBST.Length)
-                BBST[index] = array[centerIndex];
+            if (index < BalanceBST.Length)
+                BalanceBST[index] = array[centerIndex];
 
             int[] leftArrWithoutMid = new int[centerIndex];
             int[] rightArrWithoutMid = new int[array.Length - leftArrWithoutMid.Length - 1];
