@@ -11,10 +11,12 @@
     <None Remove="SimpleTreeNode\" />
     <None Remove="BSTNode\" />
     <None Remove="aBST\" />
+    <None Remove="BalancedBST\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SimpleTreeNode\" />
     <Folder Include="BSTNode\" />
     <Folder Include="aBST\" />
+    <Folder Include="BalancedBST\" />
   </ItemGroup>
 </Project>
