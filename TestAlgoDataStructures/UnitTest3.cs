@@ -1,76 +1,140 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AlgorithmsDataStructures2;
+﻿using AlgorithmsDataStructures2;
+using System;
 
-namespace Tests
+namespace AlgorithmsDataStructures3.Tests
 {
     [TestClass]
-    public class aBSTTests
+    public class BSTTests2
     {
-        [TestMethod]
-        public void TestAddKey()
+        BST<int> tree;
+        BST<int> emptyTree;
+        BSTNode<int> root;
+
+        [TestInitialize]
+        public void TestInitialize()
         {
-            aBST tree = new aBST(3);
-            int key = 5;
-
-            int index = tree.AddKey(key);
-
-            Assert.AreEqual(0, index);
+            root = new BSTNode<int>(0, 0, null);
+            tree = new BST<int>(root);
+            emptyTree = new BST<int>(null);
         }
 
         [TestMethod]
-        public void FindKeyIndexEmptyTreeReturnsZero()
+        public void DeepTestWithOption0()
         {
-            var aBST = new aBST(0);
-
-            int? result = aBST.FindKeyIndex(5);
-
-            Assert.AreEqual(0, (int?)result);
+            DeepTest(0);
         }
 
         [TestMethod]
-        public void FindKeyIndexKeyAtRootReturnsZero()
+        public void DeepTestWithOption1()
         {
-            var aBST = new aBST(1);
-            aBST.AddKey(3);
-
-            int? result = aBST.FindKeyIndex(3);
-
-            Assert.AreEqual(0, (int?)result);
+            DeepTest(1);
         }
 
         [TestMethod]
-        public void FindKeyIndexKeyAtLeftChildReturnsIndex()
+        public void DeepTestWithOption2()
         {
-            var aBST = new aBST(2);
-            aBST.AddKey(1);
-            aBST.AddKey(3);
+            DeepTest(2);
+        }
 
-            int? result = aBST.FindKeyIndex(1);
+        private void DeepTest(int option)
+        {
+            Assert.AreEqual(0, emptyTree.DeepAllNodes(option).Count);
 
-            Assert.AreEqual(0, (int?)result);
+            emptyTree.AddKeyValue(5, 5);
+
+            for (int i = 0; i < 5; ++i)
+            {
+                emptyTree.AddKeyValue(i, i);
+            }
+
+            for (int i = 6; i < 10; ++i)
+            {
+                emptyTree.AddKeyValue(i, i);
+            }
+
+            Assert.AreEqual(10, emptyTree.DeepAllNodes(option).Count);
         }
 
         [TestMethod]
-        public void FindKeyIndexKeyAtRightChildReturnsIndex()
+        public void WideTest()
         {
-            var aBST = new aBST(2);
-            aBST.AddKey(1);
-            aBST.AddKey(3);
+            Assert.AreEqual(0, emptyTree.WideAllNodes().Count);
 
-            int? result = aBST.FindKeyIndex(1);
+            emptyTree.AddKeyValue(5, 5);
+            for (int i = 0; i < 5; ++i)
+            {
+                emptyTree.AddKeyValue(i, i);
+            }
 
-            Assert.AreEqual(0, (int?)result);
+            for (int i = 6; i < 10; ++i)
+            {
+                emptyTree.AddKeyValue(i, i);
+            }
+
+            Assert.AreEqual(10, emptyTree.WideAllNodes().Count);
         }
 
         [TestMethod]
-        public void FindKeyIndex_UnfilledSlot_ReturnsNegativeIndex()
+        public void InOrderIsCorrect()
         {
-            aBST tree = new aBST(3);
-            tree.Tree[0] = null;
+            var bst = new BST<int>(null);
 
-            int? result = tree.FindKeyIndex(10);
+            bst.AddKeyValue(10, 10);
+            bst.AddKeyValue(5, 5);
+            bst.AddKeyValue(15, 15);
+            bst.AddKeyValue(3, 3);
+            bst.AddKeyValue(7, 7);
 
-            Assert.AreEqual(-0, result);
+            List<BSTNode> result = bst.DeepAllNodes(1);
+
+            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(3, result[0].NodeKey);
+            Assert.AreEqual(5, result[1].NodeKey);
+            Assert.AreEqual(7, result[2].NodeKey);
+            Assert.AreEqual(10, result[3].NodeKey);
+            Assert.AreEqual(15, result[4].NodeKey);
+        }
+
+        [TestMethod]
+        public void PreOrderIsCorrect()
+        {
+            var bst = new BST<int>(null);
+
+            bst.AddKeyValue(10, 10);
+            bst.AddKeyValue(5, 5);
+            bst.AddKeyValue(15, 15);
+            bst.AddKeyValue(3, 3);
+            bst.AddKeyValue(7, 7);
+
+            List<BSTNode> result = bst.DeepAllNodes(0);
+
+            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(10, result[0].NodeKey);
+            Assert.AreEqual(5, result[1].NodeKey);
+            Assert.AreEqual(3, result[2].NodeKey);
+            Assert.AreEqual(7, result[3].NodeKey);
+            Assert.AreEqual(15, result[4].NodeKey);
+        }
+
+        [TestMethod]
+        public void PostOrderIsCorrect()
+        {
+            var bst = new BST<int>(null);
+
+            bst.AddKeyValue(10, 10);
+            bst.AddKeyValue(5, 5);
+            bst.AddKeyValue(15, 15);
+            bst.AddKeyValue(3, 3);
+            bst.AddKeyValue(7, 7);
+
+            List<BSTNode> result = bst.DeepAllNodes(2);
+
+            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(3, result[0].NodeKey);
+            Assert.AreEqual(7, result[1].NodeKey);
+            Assert.AreEqual(5, result[2].NodeKey);
+            Assert.AreEqual(15, result[3].NodeKey);
+            Assert.AreEqual(10, result[4].NodeKey);
         }
     }
 }
