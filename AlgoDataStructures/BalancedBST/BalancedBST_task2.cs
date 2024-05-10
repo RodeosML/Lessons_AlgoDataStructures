@@ -106,24 +106,24 @@ namespace AlgorithmsDataStructures2
 
         private List<BSTNode> GetAllChildren(BSTNode node)
         {
-            List<BSTNode> allChildren = new List<BSTNode>();
+            List<BSTNode> AllChildren = new List<BSTNode>();
             BSTNode Node = node;
 
             if (Node != null)
             {
                 if (Node.LeftChild != null)
                 {
-                    allChildren.Add(Node.LeftChild);
-                    allChildren.AddRange(GetAllChildren(Node.LeftChild));
+                    AllChildren.Add(Node.LeftChild);
+                    AllChildren.AddRange(GetAllChildren(Node.LeftChild));
                 }
 
                 if (Node.RightChild != null)
                 {
-                    allChildren.Add(Node.RightChild);
-                    allChildren.AddRange(GetAllChildren(Node.RightChild));
+                    AllChildren.Add(Node.RightChild);
+                    AllChildren.AddRange(GetAllChildren(Node.RightChild));
                 }
 
-                return allChildren;
+                return AllChildren;
             }
             else
                 return null;
