@@ -17,6 +17,7 @@ namespace AlgorithmsDataStructures2
             Parent = parent;
             LeftChild = null;
             RightChild = null;
+            Level = 0;
         }
     }
 
