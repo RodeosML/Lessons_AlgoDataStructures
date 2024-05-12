@@ -46,5 +46,29 @@ namespace BalancedBSTTests
 
             Assert.IsFalse(balanced);
         }
+
+        [TestMethod]
+        public void TestNodeLevelsStartFromZero()
+        {
+            int[] testData = { 5, 3, 8, 2, 4, 7, 9 };
+
+            BalancedBST bst = new BalancedBST();
+            bst.GenerateTree(testData);
+
+            Assert.IsTrue(CheckNodeLevels(bst.Root));
+        }
+
+        private bool CheckNodeLevels(BSTNode node)
+        {
+            if (node == null) return true;
+
+            if (node.Level < 0) return false; //Уровень не может быть отрицательным
+
+            if (node.Parent == null && node.Level != 0) return false; //Для корня уровень должен быть 0
+
+            if (node.Parent != null && node.Level != node.Parent.Level + 1) return false; //Уровень дочерних узлов должен увеличиваться на 1
+
+            return CheckNodeLevels(node.LeftChild) && CheckNodeLevels(node.RightChild);
+        }
     }
 }
