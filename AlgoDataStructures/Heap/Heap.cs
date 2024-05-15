@@ -15,7 +15,9 @@ namespace AlgorithmsDataStructures2
             // создаём массив кучи HeapArray из заданного
             // размер массива выбираем на основе глубины depth
             HeapArray = new int[(int)Math.Pow(2, depth + 1) - 1];
+
             Array.Fill(HeapArray, -1);
+
             foreach (int num in a)
             {
                 Add(num);
@@ -26,7 +28,9 @@ namespace AlgorithmsDataStructures2
         {
             // вернуть значение корня и перестроить кучу
             if (HeapArray == null) return -1;
+
             int index = GetLastNotEmptyIndex();
+
             if (index != -1)
             {
                 int max = HeapArray[0];
@@ -53,6 +57,7 @@ namespace AlgorithmsDataStructures2
         private void RemoveMax(int index)
         {
             int shift = 1;
+
             if (2 * index + 2 < HeapArray.Length && HeapArray[2 * index + 1] < HeapArray[2 * index + 2])
             {
                 shift = 2;
