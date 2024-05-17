@@ -56,18 +56,25 @@ namespace AlgorithmsDataStructures2
 
         private void RemoveMax(int index)
         {
-            int shift = 1;
+            int leftChild = 2 * index + 1;
+            int rightChild = 2 * index + 2;
+            int maxChild = index;
 
-            if (2 * index + 2 < HeapArray.Length && HeapArray[2 * index + 1] < HeapArray[2 * index + 2])
+            if (leftChild < HeapArray.Length && HeapArray[leftChild] > HeapArray[maxChild])
             {
-                shift = 2;
+                maxChild = leftChild;
             }
-            if (2 * index + shift < HeapArray.Length && HeapArray[index] < HeapArray[2 * index + shift])
+            if (rightChild < HeapArray.Length && HeapArray[rightChild] > HeapArray[maxChild])
+            {
+                maxChild = rightChild;
+            }
+
+            if (maxChild != index)
             {
                 int temp = HeapArray[index];
-                HeapArray[index] = HeapArray[2 * index + shift];
-                HeapArray[2 * index + shift] = temp;
-                RemoveMax(2 * index + shift);
+                HeapArray[index] = HeapArray[maxChild];
+                HeapArray[maxChild] = temp;
+                RemoveMax(maxChild);
             }
         }
 
@@ -97,11 +104,6 @@ namespace AlgorithmsDataStructures2
 
         public bool Add(int key)
         {
-            // добавляем новый элемент key в кучу и перестраиваем её
-            if (HeapArray == null)
-            {
-                return false;
-            }
             // добавляем новый элемент key в кучу и перестраиваем её
             int index = GetFirstEmptyIndex();
             if (index != -1)
