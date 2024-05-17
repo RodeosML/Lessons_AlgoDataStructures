@@ -27,19 +27,15 @@ namespace AlgorithmsDataStructures2
         public int GetMax()
         {
             // вернуть значение корня и перестроить кучу
-            if (HeapArray == null) return -1;
+            if (HeapArray == null || HeapArray[0] == -1)
+                return -1;
 
-            int index = GetLastNotEmptyIndex();
+            int max = HeapArray[0];
+            HeapArray[0] = HeapArray[GetLastNotEmptyIndex()];
+            HeapArray[GetLastNotEmptyIndex()] = -1;
+            RemoveMax(0);
 
-            if (index != -1)
-            {
-                int max = HeapArray[0];
-                HeapArray[0] = HeapArray[index];
-                HeapArray[index] = -1;
-                RemoveMax(0);
-                return max;
-            }
-            return -1; // если куча пуста
+            return max; // если куча пуста
         }
 
         private int GetLastNotEmptyIndex()
@@ -90,16 +86,16 @@ namespace AlgorithmsDataStructures2
             return -1;
         }
 
-        private bool AddElement(int index)
+        private void AddElement(int index)
         {
-            if ((index - 1) / 2 >= 0 && HeapArray[(index - 1) / 2] < HeapArray[index])
+            while (index > 0 && HeapArray[index] > HeapArray[(index - 1) / 2])
             {
+                int parentIndex = (index - 1) / 2;
                 int temp = HeapArray[index];
-                HeapArray[index] = HeapArray[(index - 1) / 2];
-                HeapArray[(index - 1) / 2] = temp;
-                return AddElement((index - 1) / 2);
+                HeapArray[index] = HeapArray[parentIndex];
+                HeapArray[parentIndex] = temp;
+                index = parentIndex;
             }
-            return true;
         }
 
         public bool Add(int key)
@@ -109,7 +105,8 @@ namespace AlgorithmsDataStructures2
             if (index != -1)
             {
                 HeapArray[index] = key;
-                return AddElement(index);
+                AddElement(index);
+                return true;
             }
             return false; // если куча вся заполнена
         }
