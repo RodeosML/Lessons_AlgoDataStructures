@@ -1,115 +1,93 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace AlgorithmsDataStructures2
 {
     public class Heap
     {
-
         public int[] HeapArray; // хранит неотрицательные числа-ключи
+        private int capacity;
 
-        public Heap() { HeapArray = null; }
+        public Heap()
+        {
+            HeapArray = null;
+            capacity = 0;
+        }
 
         public void MakeHeap(int[] a, int depth)
         {
             // создаём массив кучи HeapArray из заданного
             // размер массива выбираем на основе глубины depth
-            HeapArray = new int[(int)Math.Pow(2, depth + 1) - 1];
+            // ...
+            int size = (int)Math.Pow(2, depth + 1) - 1;
+            HeapArray = new int[size];
+            capacity = 0;
 
-            Array.Fill(HeapArray, -1);
-
-            foreach (int num in a)
+            foreach (var key in a)
             {
-                Add(num);
+                Add(key);
             }
         }
 
         public int GetMax()
         {
             // вернуть значение корня и перестроить кучу
-            if (HeapArray == null || HeapArray[0] == -1)
-                return -1;
+            if (capacity == 0)
+                return -1; //куча пуста
 
             int max = HeapArray[0];
-            HeapArray[0] = HeapArray[GetLastNotEmptyIndex()];
-            HeapArray[GetLastNotEmptyIndex()] = -1;
-            RemoveMax(0);
+            HeapArray[0] = HeapArray[capacity - 1];
+            capacity--;
+            HeapifyDown(0);
 
-            return max; // если куча пуста
-        }
-
-        private int GetLastNotEmptyIndex()
-        {
-            for (int i = HeapArray.Length - 1; i >= 0; i--)
-            {
-                if (HeapArray[i] != -1)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        private void RemoveMax(int index)
-        {
-            int leftChild = 2 * index + 1;
-            int rightChild = 2 * index + 2;
-            int maxChild = index;
-
-            if (leftChild < HeapArray.Length && HeapArray[leftChild] > HeapArray[maxChild])
-            {
-                maxChild = leftChild;
-            }
-            if (rightChild < HeapArray.Length && HeapArray[rightChild] > HeapArray[maxChild])
-            {
-                maxChild = rightChild;
-            }
-
-            if (maxChild != index)
-            {
-                int temp = HeapArray[index];
-                HeapArray[index] = HeapArray[maxChild];
-                HeapArray[maxChild] = temp;
-                RemoveMax(maxChild);
-            }
-        }
-
-        private int GetFirstEmptyIndex()
-        {
-            for (int i = 0; i < HeapArray.Length; i++)
-            {
-                if (HeapArray[i] == -1)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        private void AddElement(int index)
-        {
-            while (index > 0 && HeapArray[index] > HeapArray[(index - 1) / 2])
-            {
-                int parentIndex = (index - 1) / 2;
-                int temp = HeapArray[index];
-                HeapArray[index] = HeapArray[parentIndex];
-                HeapArray[parentIndex] = temp;
-                index = parentIndex;
-            }
+            return max;
         }
 
         public bool Add(int key)
         {
             // добавляем новый элемент key в кучу и перестраиваем её
-            int index = GetFirstEmptyIndex();
-            if (index != -1)
-            {
-                HeapArray[index] = key;
-                AddElement(index);
-                return true;
-            }
-            return false; // если куча вся заполнена
+            if (capacity >= HeapArray.Length)
+                return false; //куча заполнена
+
+            HeapArray[capacity] = key;
+            capacity++;
+            HeapifyUp(capacity - 1);
+            return true;
         }
 
+        private void HeapifyDown(int index)
+        {
+            int largest = index;
+            int leftChild = 2 * index + 1;
+            int rightChild = 2 * index + 2;
+
+            if (leftChild < capacity && HeapArray[leftChild] > HeapArray[largest])
+                largest = leftChild;
+
+            if (rightChild < capacity && HeapArray[rightChild] > HeapArray[largest])
+                largest = rightChild;
+
+            if (largest != index)
+            {
+                Swap(index, largest);
+                HeapifyDown(largest);
+            }
+        }
+
+        private void HeapifyUp(int index)
+        {
+            int parent = (index - 1) / 2;
+            if (parent >= 0 && HeapArray[parent] < HeapArray[index])
+            {
+                Swap(parent, index);
+                HeapifyUp(parent);
+            }
+        }
+
+        private void Swap(int index1, int index2)
+        {
+            int temp = HeapArray[index1];
+            HeapArray[index1] = HeapArray[index2];
+            HeapArray[index2] = temp;
+        }
     }
 }
