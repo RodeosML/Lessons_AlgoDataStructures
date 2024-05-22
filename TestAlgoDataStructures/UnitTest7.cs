@@ -1,4 +1,4 @@
-﻿using AlgorithmsDataStructures2;
+﻿using AlgorithmsDataStructures6;
 
 namespace BalancedBSTTests
 {

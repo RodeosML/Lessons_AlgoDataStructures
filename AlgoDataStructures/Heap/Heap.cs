@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AlgorithmsDataStructures2
+namespace AlgorithmsDataStructures6
 {
     public class Heap
     {
