@@ -1,4 +1,4 @@
-﻿using AlgorithmsDataStructures2;
+﻿using AlgorithmsDataStructures7;
 
 namespace SimpleGraphTests
 {

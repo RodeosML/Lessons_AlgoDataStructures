@@ -14,6 +14,7 @@
     <None Remove="BalancedBST\" />
     <None Remove="Heap\" />
     <None Remove="Graph\" />
+    <None Remove="EvenTrees\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SimpleTreeNode\" />
@@ -22,5 +23,6 @@
     <Folder Include="BalancedBST\" />
     <Folder Include="Heap\" />
     <Folder Include="Graph\" />
+    <Folder Include="EvenTrees\" />
   </ItemGroup>
 </Project>
