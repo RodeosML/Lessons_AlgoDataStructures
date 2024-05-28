@@ -27,30 +27,65 @@ namespace AlgorithmsDataStructures2
             Root = root;
         }
 
-        public List<T> EvenTrees()
+        public List<SimpleTreeNode<T>> GetAllNodes()
         {
-            List<T> result = new List<T>();
-            CountNodesAndFindEdgesToRemove(Root, result);
-            return result;
+            if (Root == null)
+                return new List<SimpleTreeNode<T>>();
+
+            return GetNodes(Root);
         }
 
-        private int CountNodesAndFindEdgesToRemove(SimpleTreeNode<T> node, List<T> result)
+        private List<SimpleTreeNode<T>> GetNodes(SimpleTreeNode<T> rootNode)
         {
-            int count = 1;
+            List<SimpleTreeNode<T>> nodes = new List<SimpleTreeNode<T>>();
+            nodes.Add(rootNode);
+
+            if (rootNode.Children == null || rootNode.Children.Count == 0)
+            {
+                return nodes;
+            }
+
+            foreach (SimpleTreeNode<T> node in rootNode.Children)
+            {
+                nodes.AddRange(GetNodes(node));
+            }
+
+            return nodes;
+        }
+
+        public int Count()
+        {
+            if (Root != null)
+            {
+                List<SimpleTreeNode<T>> AllNodes = GetAllNodes();
+                return AllNodes.Count;
+            }
+            return 0;
+        }
+
+        public List<T> EvenTrees()
+        {
+            List<T> deletedEdges = new List<T>();
+            if (Root == null) return deletedEdges;
+
+            DepthFirstSearch(Root, deletedEdges);
+            return deletedEdges;
+        }
+
+        private int DepthFirstSearch(SimpleTreeNode<T> node, List<T> deletedEdges)
+        {
+            int subtreeNodeCount = 1;
             foreach (var child in node.Children)
             {
-                int childCount = CountNodesAndFindEdgesToRemove(child, result);
+                int childCount = DepthFirstSearch(child, deletedEdges);
+                subtreeNodeCount += childCount;
                 if (childCount % 2 == 0)
                 {
-                    result.Add(node.NodeValue);
-                    result.Add(child.NodeValue);
-                }
-                else
-                {
-                    count += childCount;
+                    deletedEdges.Add(node.NodeValue);
+                    deletedEdges.Add(child.NodeValue);
                 }
             }
-            return count;
+            return subtreeNodeCount;
         }
     }
 }
